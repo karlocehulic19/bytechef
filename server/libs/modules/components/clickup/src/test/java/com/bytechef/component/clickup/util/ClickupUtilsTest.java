@@ -18,6 +18,7 @@ package com.bytechef.component.clickup.util;
 
 import static com.bytechef.component.clickup.constant.ClickupConstants.FOLDER_ID;
 import static com.bytechef.component.clickup.constant.ClickupConstants.ID;
+import static com.bytechef.component.clickup.constant.ClickupConstants.LIST_ID;
 import static com.bytechef.component.clickup.constant.ClickupConstants.NAME;
 import static com.bytechef.component.clickup.constant.ClickupConstants.SPACE_ID;
 import static com.bytechef.component.definition.ComponentDsl.option;
@@ -58,62 +59,79 @@ class ClickupUtilsTest {
     @BeforeEach()
     void beforeEach() {
         when(mockedActionContext.http(any()))
-            .thenReturn(mockedExecutor);
+                .thenReturn(mockedExecutor);
         when(mockedTriggerContext.http(any()))
-            .thenReturn(mockedExecutor);
+                .thenReturn(mockedExecutor);
         when(mockedExecutor.body(bodyArgumentCaptor.capture()))
-            .thenReturn(mockedExecutor);
+                .thenReturn(mockedExecutor);
         when(mockedExecutor.configuration(any()))
-            .thenReturn(mockedExecutor);
+                .thenReturn(mockedExecutor);
         when(mockedExecutor.execute())
-            .thenReturn(mockedResponse);
+                .thenReturn(mockedResponse);
+    }
+
+    @Test
+    void testGetTaskIdOptions() {
+        when(mockedParameters.getString(FOLDER_ID))
+                .thenReturn("folder");
+        when(mockedParameters.getRequiredString(SPACE_ID))
+                .thenReturn("space");
+        when(mockedParameters.getRequiredString(LIST_ID))
+                .thenReturn("list");
+        when(mockedResponse.getBody(any(TypeReference.class)))
+                .thenReturn(Map.of("tasks",
+                        List.of(Map.of(NAME, "some task", ID, "abc"), Map.of(NAME, "another task", ID, "abd"))));
+
+        assertEquals(List.of(option("some task", "abc"), option("another task", "abd")),
+                ClickupUtils.getTaskIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
     }
 
     @Test
     void testGetListIdOptions() {
         when(mockedParameters.getString(FOLDER_ID))
-            .thenReturn("folder");
+                .thenReturn("folder");
         when(mockedParameters.getRequiredString(SPACE_ID))
-            .thenReturn("space");
+                .thenReturn("space");
 
         when(mockedResponse.getBody(any(TypeReference.class)))
-            .thenReturn(Map.of("lists", List.of(Map.of(NAME, "some name", ID, "abc"))));
+                .thenReturn(Map.of("lists", List.of(Map.of(NAME, "some name", ID, "abc"))));
 
         assertEquals(List.of(option("some name", "abc"), option("some name", "abc")),
-            ClickupUtils.getListIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
+                ClickupUtils.getListIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
     }
 
     @Test
     void testGetFolderIdOptions() {
         when(mockedResponse.getBody(any(TypeReference.class)))
-            .thenReturn(Map.of("folders", List.of(Map.of(NAME, "some name", ID, "abc"))));
+                .thenReturn(Map.of("folders", List.of(Map.of(NAME, "some name", ID, "abc"))));
 
         assertEquals(expectedOptions,
-            ClickupUtils.getFolderIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
+                ClickupUtils.getFolderIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
     }
 
     @Test
     void testGetSpaceIdOptions() {
         when(mockedResponse.getBody(any(TypeReference.class)))
-            .thenReturn(Map.of("spaces", List.of(Map.of(NAME, "some name", ID, "abc"))));
+                .thenReturn(Map.of("spaces", List.of(Map.of(NAME, "some name", ID, "abc"))));
 
         assertEquals(expectedOptions,
-            ClickupUtils.getSpaceIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
+                ClickupUtils.getSpaceIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
     }
 
     @Test
     void testGetWorkspaceIdOptions() {
         when(mockedResponse.getBody(any(TypeReference.class)))
-            .thenReturn(Map.of("teams", List.of(Map.of(NAME, "some name", ID, "abc"))));
+                .thenReturn(Map.of("teams", List.of(Map.of(NAME, "some name", ID, "abc"))));
 
         assertEquals(expectedOptions,
-            ClickupUtils.getWorkspaceIdOptions(mockedParameters, mockedParameters, Map.of(), "", mockedActionContext));
+                ClickupUtils.getWorkspaceIdOptions(mockedParameters, mockedParameters, Map.of(), "",
+                        mockedActionContext));
     }
 
     @Test
     void testSubscribeWebhook() {
         when(mockedResponse.getBody(any(TypeReference.class)))
-            .thenReturn(Map.of(ID, "123"));
+                .thenReturn(Map.of(ID, "123"));
 
         String id = ClickupUtils.subscribeWebhook("webhookUrl", mockedTriggerContext, "id", "eventType");
 
@@ -136,9 +154,9 @@ class ClickupUtilsTest {
     @Test
     void testGetCreatedObject() {
         when(mockedResponse.getBody(any(TypeReference.class)))
-            .thenReturn(Map.of(ID, "123"));
+                .thenReturn(Map.of(ID, "123"));
 
         assertEquals(Map.of(ID, "123"),
-            ClickupUtils.getCreatedObject(mockedWebhookBody, mockedTriggerContext, "id", "path"));
+                ClickupUtils.getCreatedObject(mockedWebhookBody, mockedTriggerContext, "id", "path"));
     }
 }
