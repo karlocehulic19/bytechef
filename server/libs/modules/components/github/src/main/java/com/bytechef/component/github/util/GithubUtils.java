@@ -45,6 +45,20 @@ public class GithubUtils {
     private GithubUtils() {
     }
 
+    public static List<Option<String>> getMilestones(
+            Parameters inputParameters, Parameters connectionParameters, Map<String, String> stringStringMap, String s,
+            ActionContext context) {
+
+        List<Map<String, Object>> body = context
+                .http(http -> http.get(
+                        "/repos/" + getOwnerName(context) + "/" + inputParameters.getRequiredString(REPOSITORY)
+                                + "/milestones"))
+                .configuration(responseType(Http.ResponseType.JSON))
+                .execute().getBody(new TypeReference<>() {
+                });
+
+        return getOptions(body, TITLE, "number");    }
+
     public static List<Option<String>> getCollaborators(
         Parameters inputParameters, Parameters connectionParameters, Map<String, String> stringStringMap, String s,
         ActionContext context) {

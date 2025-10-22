@@ -31,6 +31,7 @@ import com.bytechef.component.github.action.GithubGetIssueAction;
 import com.bytechef.component.github.action.GithubListIssuesAction;
 import com.bytechef.component.github.action.GithubListRepositoryIssuesAction;
 import com.bytechef.component.github.action.GithubStarRepositoryAction;
+import com.bytechef.component.github.action.GithubUpdateIssueAction;
 import com.bytechef.component.github.trigger.GithubNewIssueTrigger;
 import com.bytechef.component.github.trigger.GithubNewPullRequestTrigger;
 import com.google.auto.service.AutoService;
@@ -42,33 +43,35 @@ import com.google.auto.service.AutoService;
 public class GithubComponentHandler implements ComponentHandler {
 
     private static final ComponentDefinition COMPONENT_DEFINITION = component("github")
-        .title("GitHub")
-        .description("GitHub is a web-based platform for version control and collaboration using Git.")
-        .customAction(true)
-        .categories(ComponentCategory.DEVELOPER_TOOLS)
-        .connection(CONNECTION_DEFINITION)
-        .actions(
-            GithubAddAssigneesToIssueAction.ACTION_DEFINITION,
-            GithubAddLabelsToIssueAction.ACTION_DEFINITION,
-            GithubCreateCommentOnIssueAction.ACTION_DEFINITION,
-            GithubCreateIssueAction.ACTION_DEFINITION,
-            GithubGetIssueAction.ACTION_DEFINITION,
-            GithubListIssuesAction.ACTION_DEFINITION,
-            GithubListRepositoryIssuesAction.ACTION_DEFINITION,
-            GithubStarRepositoryAction.ACTION_DEFINITION)
-        .icon("path:assets/github.svg")
-        .clusterElements(
-            tool(GithubAddAssigneesToIssueAction.ACTION_DEFINITION),
-            tool(GithubAddLabelsToIssueAction.ACTION_DEFINITION),
-            tool(GithubCreateCommentOnIssueAction.ACTION_DEFINITION),
-            tool(GithubCreateIssueAction.ACTION_DEFINITION),
-            tool(GithubGetIssueAction.ACTION_DEFINITION),
-            tool(GithubListIssuesAction.ACTION_DEFINITION),
-            tool(GithubListRepositoryIssuesAction.ACTION_DEFINITION),
-            tool(GithubStarRepositoryAction.ACTION_DEFINITION))
-        .triggers(
-            GithubNewIssueTrigger.TRIGGER_DEFINITION,
-            GithubNewPullRequestTrigger.TRIGGER_DEFINITION);
+            .title("GitHub")
+            .description("GitHub is a web-based platform for version control and collaboration using Git.")
+            .customAction(true)
+            .categories(ComponentCategory.DEVELOPER_TOOLS)
+            .connection(CONNECTION_DEFINITION)
+            .actions(
+                    GithubUpdateIssueAction.ACTION_DEFINITION,
+                    GithubAddAssigneesToIssueAction.ACTION_DEFINITION,
+                    GithubAddLabelsToIssueAction.ACTION_DEFINITION,
+                    GithubCreateCommentOnIssueAction.ACTION_DEFINITION,
+                    GithubCreateIssueAction.ACTION_DEFINITION,
+                    GithubGetIssueAction.ACTION_DEFINITION,
+                    GithubListIssuesAction.ACTION_DEFINITION,
+                    GithubListRepositoryIssuesAction.ACTION_DEFINITION,
+                    GithubStarRepositoryAction.ACTION_DEFINITION)
+            .icon("path:assets/github.svg")
+            .clusterElements(
+                    tool(GithubUpdateIssueAction.ACTION_DEFINITION),
+                    tool(GithubAddAssigneesToIssueAction.ACTION_DEFINITION),
+                    tool(GithubAddLabelsToIssueAction.ACTION_DEFINITION),
+                    tool(GithubCreateCommentOnIssueAction.ACTION_DEFINITION),
+                    tool(GithubCreateIssueAction.ACTION_DEFINITION),
+                    tool(GithubGetIssueAction.ACTION_DEFINITION),
+                    tool(GithubListIssuesAction.ACTION_DEFINITION),
+                    tool(GithubListRepositoryIssuesAction.ACTION_DEFINITION),
+                    tool(GithubStarRepositoryAction.ACTION_DEFINITION))
+            .triggers(
+                    GithubNewIssueTrigger.TRIGGER_DEFINITION,
+                    GithubNewPullRequestTrigger.TRIGGER_DEFINITION);
 
     @Override
     public ComponentDefinition getDefinition() {
