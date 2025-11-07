@@ -106,10 +106,10 @@ public class CsvFileReadUtils {
     public static Iterator<CSVRecord> getIterator(
             BufferedReader bufferedReader, ReadConfiguration configuration) throws IOException {
 
-        Iterator<CSVRecord> iterator;
-        List<String> regexSpecials = Arrays.asList(".", "+", "*", "?", "^", "$", "(", ")", "[", "]", "{", "}", "|",
+        List<String> regexReservedCharacters = Arrays.asList(".", "+", "*", "?", "^", "$", "(", ")", "[", "]", "{", "}", "|",
                 "\\");
 
+        CSVFormat csvFormat;
         if (configuration.headerRow()) {
             String delimiter = configuration.delimiter();
             String regexPrefix = "";
@@ -144,7 +144,7 @@ public class CsvFileReadUtils {
                     .get();
 
             CSVParser csvParser = csvFormat.parse(bufferedReader);
-            iterator = csvParser.iterator();
+             = csvParser.iterator();
         } else {
             CSVFormat csvFormat = CSVFormat.DEFAULT;
 
